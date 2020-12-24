@@ -36,4 +36,9 @@ class SearchController extends Controller
         ];
         return response()->json($result);
     }
+
+    public function test()
+    {
+        return response()->json('test');
+    }
 }
