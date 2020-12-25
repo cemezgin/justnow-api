@@ -25,34 +25,34 @@ class SearchResultService
     {
         $userId = Helper::getCurrentUser();
         return DB::connection('pgsql')
-            ->select(" select DISTINCT tour_categories.id FROM activity_bookings
+            ->select(" select DISTINCT tour_categories.id,count(tour_categories.id) FROM activity_bookings
                                  inner join activities on activities.id = activity_bookings.activity_id
                                  inner join activity_categories on activities.id = activity_bookings.activity_id
                                  inner join tour_categories on category_id = tour_categories.id
                                  WHERE activity_categories.activity_id = activities.id
-                                  and activity_bookings.user_id = $userId;");
+                                  and activity_bookings.user_id = $userId GROUP BY tour_categories.id order by count;");
     }
 
     private function getFirstBookingInLocation()
     {
         return DB::connection('pgsql')
-            ->select(" select DISTINCT tour_categories.id FROM activity_bookings
+            ->select(" select DISTINCT tour_categories.id,count(tour_categories.id) FROM activity_bookings
                                  inner join activities on activities.id = activity_bookings.activity_id
                                  inner join activity_categories on activities.id = activity_bookings.activity_id
                                  inner join tour_categories on category_id = tour_categories.id
                                  WHERE activity_categories.activity_id = activities.id
-                                  and activity_bookings.is_first = true and activities.country = '$this->country';");
+                                  and activity_bookings.is_first = true and activities.country = '$this->country' GROUP BY tour_categories.id order by count;");
     }
 
     private function filterByPopularInLocation()
     {
         return DB::connection('pgsql')
-            ->select(" select DISTINCT tour_categories.id FROM activity_bookings
+            ->select(" select DISTINCT tour_categories.id,count(tour_categories.id) FROM activity_bookings
                                  inner join activities on activities.id = activity_bookings.activity_id
                                  inner join activity_categories on activities.id = activity_bookings.activity_id
                                  inner join tour_categories on category_id = tour_categories.id
                                  WHERE activity_categories.activity_id = activities.id
-                                  and activities.country = '$this->country';");
+                                  and activities.country = '$this->country' GROUP BY tour_categories.id order by count;");
     }
 
     private function getAllCategories()
@@ -93,8 +93,8 @@ class SearchResultService
         } else {
             $interests = $this->filterByPreviousInterest();
         }
-        $interests = count($interests) < 25 ? array_merge($interests, $this->filterByPopularInLocation()) : $interests;
-        $interests = count($interests) < 25 ? array_merge($interests, $this->getAllCategories()) : $interests;
+        $interests = count($interests) < 10 ? array_merge($interests, $this->filterByPopularInLocation()) : $interests;
+        $interests = count($interests) < 10 ? array_merge($interests, $this->getAllCategories()) : $interests;
 
 
         $input = array_map("unserialize", array_unique(array_map("serialize", $interests)));
@@ -126,71 +126,5 @@ class SearchResultService
 
         return $geoLocations;
     }
-
-       // return $this->distances($geoLocations);
-
-      //  if ($geolocations) {
-         //   $list = (new DistanceMatrixService($this->currentGeolocation, $geolocations))->curl();
-
-
-//                foreach ($list['rows'][0]['elements'] as $key => $element) {
-//                        $mapped[$key] = [
-//                            'key' => $key,
-//                            'distance' => $element['distance'],
-//                            'duration' => $element['duration']
-//                        ];
-//                }
-
-//            return $mapped;
-//        }
-//    }
-
-////
-//$maxDistance = $this->maxDistance(...$geoLocations);
-
-//
-//    /**
-//     * Finds the max distance between all of geolocation combinations
-//     *
-//     * @param $coordinates
-//     * @return array
-//     */
-//    private function distances($coordinates)
-//    {
-//        $distance = [];
-//
-//        for ($i = 0; $i < count($coordinates); $i++) {
-//            for ($j = 0; $j < count($coordinates); $j++) {
-//                if ($i === $j) {
-//                    continue;
-//                }
-//
-//                $distance[] = [
-//                    'distance' => Helper::distanceBetweenGeoLocations(
-//                        $coordinates[$i]['coordinates'],
-//                        $coordinates[$j]['coordinates']
-//                    ),
-//                    'activity' => [
-//                        'activity1' => $coordinates[$i]['activity'],
-//                        'activity2' => $coordinates[$j]['activity']
-//                    ]
-//                ];
-//            }
-//        }
-//
-//        usort($distance, function ($a, $b) {
-//            return strcmp($a["distance"], $b["distance"]);
-//        });
-//
-//        return $distance;
-//    }
-
-//    private function calculateAvailableTotalTime()
-//    {
-//        $datetime1 = new DateTime($this->timeStart);
-//        $datetime2 = new DateTime($this->timeEnd);
-//        $interval = $datetime1->diff($datetime2);
-//        return 'PT'.$interval->format('%h').'H'.$interval->format('%i').'M';
-//    }
 
 }

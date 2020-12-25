@@ -6,11 +6,12 @@ use App\Activity;
 use App\Services\Coordinates;
 use App\Services\DistanceMatrixService;
 use App\Services\SearchResultService;
+use App\Services\TransportationAlgorithmService;
 use Illuminate\Http\Request;
 
 class SearchController extends Controller
 {
-    public function searchResult()
+    public function searchResult(Request $request)
     {
         $geo = [
             'latitude' => 41.906539,
@@ -19,21 +20,15 @@ class SearchController extends Controller
         return response()->json((new SearchResultService('Rome', 'Italy', $geo))->exec());
     }
 
-    public function findDistanceByTypes()
+    public function findDistanceByTypes(Request $request)
     {
-        $latitude1 = 41.906539;
-        $longitude1 = 12.483015;
-        $latitude2 = 41.906397;
-        $longitude2 = 12.48196;
-        $transit = new DistanceMatrixService(new Coordinates($latitude1,$longitude1),new Coordinates($latitude2,$longitude2),'transit');
-        $walk = new DistanceMatrixService(new Coordinates($latitude1,$longitude1),new Coordinates($latitude2,$longitude2),'walking');
-        $car = new DistanceMatrixService(new Coordinates($latitude1,$longitude1),new Coordinates($latitude2,$longitude2),'driving');
+        $latitude1 = $request->query('lat1');
+        $longitude1 = $request->query('long1');
+        $latitude2 = $request->query('lat2');
+        $longitude2 = $request->query('long2');
 
-        $result = [
-            'public' => $transit->curlToGoogle(),
-            'walk' => $walk->curlToGoogle(),
-            'transfer' => $car->curlToGoogle()
-        ];
+        $result = (new TransportationAlgorithmService())->get($latitude1,$longitude1,$latitude2,$longitude2);
+
         return response()->json($result);
     }
 
