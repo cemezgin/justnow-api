@@ -20,4 +20,3 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('search', 'SearchController@searchResult');
 Route::get('distance', 'SearchController@findDistanceByTypes');
-Route::get('test', 'SearchController@test');

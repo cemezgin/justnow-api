@@ -11,6 +11,11 @@ class Helper
         return 1;
     }
 
+    public static function getTransferProvider()
+    {
+        return 1;
+    }
+
     /**
      * Haversine formula:
      * a = sin²(Δφ/2) + cos φ1 ⋅ cos φ2 ⋅ sin²(Δλ/2)

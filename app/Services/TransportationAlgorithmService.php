@@ -22,20 +22,27 @@ class TransportationAlgorithmService
             $best = 'public';
         }
 
+        if ($walkInfo['rows'][0]['elements'][0]['duration']['value'] < 900) {
+            $best = 'walk';
+        }
+
         return [
             'destination_addresses' => $walkInfo['destination_addresses'],
             'origin_addresses' => $walkInfo['origin_addresses'],
             'public' => [
                 $publicTransportationInfo['rows'][0]['elements'][0]['duration']['text'],
-                $publicTransportationInfo['rows'][0]['elements'][0]['distance']['text']
+                $publicTransportationInfo['rows'][0]['elements'][0]['distance']['text'],
+                $publicTransportationInfo['rows'][0]['elements'][0]['duration']['value']
             ],
             'walk' => [
                 $walkInfo['rows'][0]['elements'][0]['duration']['text'],
-                $walkInfo['rows'][0]['elements'][0]['distance']['text']
+                $walkInfo['rows'][0]['elements'][0]['distance']['text'],
+                $walkInfo['rows'][0]['elements'][0]['duration']['value']
             ],
             'transfer' => [
                 $carInfo['rows'][0]['elements'][0]['duration']['text'],
-                $carInfo['rows'][0]['elements'][0]['distance']['text']
+                $carInfo['rows'][0]['elements'][0]['distance']['text'],
+                $carInfo['rows'][0]['elements'][0]['duration']['value']
             ],
             'best_option' => $best
         ];
