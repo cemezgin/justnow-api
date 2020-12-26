@@ -17,7 +17,7 @@ class TransportationAlgorithmService
         if ($walkInfo['rows'][0]['elements'][0]['duration']['value'] < $carInfo['rows'][0]['elements'][0]['duration']['value']) {
             $best = 'walk';
         } elseif($carInfo['rows'][0]['elements'][0]['duration']['value'] < $publicTransportationInfo['rows'][0]['elements'][0]['duration']['value']){
-            $best = 'transfer';
+            $best = 'transfer/car';
         } else {
             $best = 'public';
         }
@@ -39,7 +39,7 @@ class TransportationAlgorithmService
                 $walkInfo['rows'][0]['elements'][0]['distance']['text'],
                 $walkInfo['rows'][0]['elements'][0]['duration']['value']
             ],
-            'transfer' => [
+            'transfer/car' => [
                 $carInfo['rows'][0]['elements'][0]['duration']['text'],
                 $carInfo['rows'][0]['elements'][0]['distance']['text'],
                 $carInfo['rows'][0]['elements'][0]['duration']['value']
