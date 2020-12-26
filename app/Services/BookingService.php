@@ -17,7 +17,7 @@ class BookingService
             $book->activity_id = $booking['activity_id'];
             $book->user_id = Helper::getCurrentUser();
             $book->is_used = false;
-            $book->order = $key;
+            $book->order = $key + 1;
             $book->save();
             $map[] = $book;
         }
@@ -29,15 +29,13 @@ class BookingService
         $map = [];
         foreach ($activities as $key => $activity)
         {
-            if($activity['is_transfer']) {
                 $transfer = new TransferBooking();
                 $transfer->transfer_id = Helper::getTransferProvider();
-                $transfer->first_activity_id = $activity->id;
-                $transfer->next_activity_id = isset($activities[$key + 1]) ? $activities[$key + 1]->id : null;
+                $transfer->first_activity_id = $activity['activity_id'];
+                $transfer->next_activity_id = isset($activities[$key + 1]) ? $activities[$key + 1]['activity_id'] : null;
                 $transfer->is_used = false;
                 $transfer->save();
                 $map[] = $transfer;
-            }
         }
         return $map;
     }
