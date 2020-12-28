@@ -67,4 +67,8 @@ class BookingService
         return $randomString;
     }
 
+    public function useBooking($qr, $activity_booking_id, $transfer_booking_id) {
+
+    }
+
 }

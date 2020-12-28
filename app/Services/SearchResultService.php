@@ -94,7 +94,7 @@ class SearchResultService
             $interests = $this->filterByPreviousInterest();
         }
         $interests = count($interests) < 10 ? array_merge($interests, $this->filterByPopularInLocation()) : $interests;
-        $interests = count($interests) < 10 ? array_merge($interests, $this->getAllCategories()) : $interests;
+       // $interests = count($interests) < 10 ? array_merge($interests, $this->getAllCategories()) : $interests;
 
 
         $input = array_map("unserialize", array_unique(array_map("serialize", $interests)));

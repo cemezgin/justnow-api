@@ -21,6 +21,11 @@ class BookingController extends Controller
         $bookActivity = $this->bookingService->save($activities);
         $bookTransfer = $this->bookingService->saveTransferBooking($activities);
         $save = $this->bookingService->saveBooking($bookActivity,$bookTransfer);
+
         return response()->json($save);
+    }
+
+    public function useBooking(Request $request) {
+        $this->bookingService->useBooking($request->get('activities'), $request->get('activity_booking_id'),  $request->get('transfer_booking_id'));
     }
 }

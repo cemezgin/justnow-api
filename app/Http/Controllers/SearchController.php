@@ -23,6 +23,8 @@ class SearchController extends Controller
         ];
         $location = 'Rome';
         $country = 'Italy';
+        $hour = $request->get('hour');
+        $minute = $request->get('minute');
 
         return response()->json((new SearchResultService($location, $country, $geo))->exec());
     }
