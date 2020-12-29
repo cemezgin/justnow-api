@@ -21,3 +21,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get('search', 'SearchController@searchResult');
 Route::get('distance', 'SearchController@findDistanceByTypes');
 Route::post('book', 'BookingController@saveBooking');
+Route::get('use/{qr_code}', 'BookingController@useBooking');

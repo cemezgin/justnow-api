@@ -6,6 +6,7 @@ use App\ActivityBooking;
 use App\Booking;
 use App\TransferBooking;
 use App\Utils\Helper;
+use Illuminate\Support\Facades\DB;
 
 class BookingService
 {
@@ -16,6 +17,9 @@ class BookingService
             $book = new ActivityBooking();
             $book->activity_id = $booking['activity_id'];
             $book->user_id = Helper::getCurrentUser();
+            if(!$this->checkIsFirst(Helper::getCurrentUser())) {
+                $book->first_booking = true;
+            }
             $book->is_used = false;
             $book->order = $key + 1;
             $book->save();
@@ -68,7 +72,13 @@ class BookingService
     }
 
     public function useBooking($qr, $activity_booking_id, $transfer_booking_id) {
+        return $qr . 'USED';
+    }
 
+    public function checkIsFirst($userId)
+    {
+        return DB::connection('pgsql')
+            ->select("SELECT count(id) FROM activity_bookings where user_id=$userId");
     }
 
 }

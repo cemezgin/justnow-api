@@ -26,6 +26,7 @@ class BookingController extends Controller
     }
 
     public function useBooking(Request $request) {
-        $this->bookingService->useBooking($request->get('activities'), $request->get('activity_booking_id'),  $request->get('transfer_booking_id'));
+        $result = $this->bookingService->useBooking($request->get('qr_code'), $request->get('activity_booking_id'),  $request->get('transfer_booking_id'));
+        return response()->json($result);
     }
 }
