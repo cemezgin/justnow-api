@@ -4,6 +4,12 @@ https://justnow-api.herokuapp.com
 
 For Web Version: https://justnow-web.herokuapp.com
 
+Justnow is a custom travel planner. It learns your interests on your every booking and gives suggestions and shows activities to you around this area.
+
+For travellers which has limited time, you can select your availability and justnow makes you a plan according to the traffic times and transportation times between the activity locations.
+
+#### This project made for the Setur Travel Hackaton and became a 3rd in there.
+
 
 ## Getting Started
 
